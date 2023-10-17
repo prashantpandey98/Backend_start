@@ -1,23 +1,18 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const app = express();
 
+const adminRoutes = require("./routes/admin");
+const shopRoutes = require("./routes/shop");
+
+const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use("/add-product", (req, res, next) => {
-  console.log("This is a another middleware");
-  res.send(
-    '<form action="/product" method="POST"><input type="text" name="product"><input type="number" name="size"><button type="submit">Add Product</button></form>'
-  );
-});
+app.use("/admin", adminRoutes); // sets a common /admin for all middlewares in adminRoutes
+app.use("/shop", shopRoutes); // sets a common /shop for all middleswares in shopRoutes...so now / will give page not found
 
-app.post("/product", (req, res, next) => {
-  console.log(req.body);
-  res.redirect("/");
-});
-
-app.use("/", (req, res, next) => {
-  res.send("<h1>Hello Express</h1>");
+//to add error page if no middleware works
+app.use((req, res, next) => {
+  res.status(404).send("<h1>The requested page was not found...</h1>");
 });
 
 app.listen(3000);
