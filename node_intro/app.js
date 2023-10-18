@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const app = express();
 
 const adminRoutes = require("./routes/admin");
@@ -12,7 +13,7 @@ app.use("/shop", shopRoutes); // sets a common /shop for all middleswares in sho
 
 //to add error page if no middleware works
 app.use((req, res, next) => {
-  res.status(404).send("<h1>The requested page was not found...</h1>");
+  res.status(404).sendFile(path.join(__dirname, "views", "404.html"));
 });
 
 app.listen(3000);
